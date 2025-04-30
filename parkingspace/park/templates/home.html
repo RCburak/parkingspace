@@ -105,14 +105,15 @@
                 <div class="form-group mb-2 mx-3">
                     <label for="location" class="mr-2 text-white">Location</label>
                     <select class="form-control custom-form" id="location" name="location">
+                        <option value="" disabled selected>Select a location</option> <!-- Empty placeholder option -->
                         <option value="Beykoz/Ebebek">Beykoz/Ebebek</option>
                         <option value="Üsküdar/AkasyaAWM">Üsküdar/AkasyaAWM</option>
                     </select>
                 </div>
-            </form>
 
-            <!-- Show Live Video Button (Initially Hidden) -->
-            <button class="btn btn-primary mt-3" id="show-video-btn" style="display:none;">Show Live Video</button>
+                <!-- Show Live Video Button placed beside the select field -->
+                <button class="btn btn-primary mt-3 ml-3" id="show-video-btn" type="button" style="display:none;">Show Live Video</button>
+            </form>
         </div>
     </section>
 
@@ -133,8 +134,10 @@
             var location = this.value;
             var showButton = document.getElementById('show-video-btn');
 
-            // Show the "Show Live Video" button
-            showButton.style.display = 'inline-block';
+            // Show the "Show Live Video" button only if a location is selected
+            if (location) {
+                showButton.style.display = 'inline-block';
+            }
         });
 
         // When "Show Live Video" button is clicked, open video in a new window

@@ -18,6 +18,12 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/styles.css">
 
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
     <!-- Scroll Reveal -->
     <script src="https://unpkg.com/scrollreveal"></script>
 </head>
@@ -105,12 +111,12 @@
                         <option value="Üsküdar/AkasyaAWM">Üsküdar/AkasyaAWM</option>
                     </select>
                 </div>
-                <!-- "Show Video" Button -->
-                <button class="btn btn-primary mt-3 ml-3" id="show-video-btn" type="button" style="display:none;">Show Live Video</button>
-
-                <!-- "Show Maps" Button (Initially hidden) -->
+                <button class="btn btn-primary mt-3 ml-3" id="show-video-btn" type="button" style="display:none;">Show Video</button>
                 <button class="btn btn-info mt-3 ml-3" id="show-maps-btn" type="button" style="display:none;">Show Maps</button>
             </form>
+
+            <!-- Leaflet Map -->
+            <div id="leaflet-map" style="height: 400px; width: 100%; display: none;"></div>
         </div>
     </section>
 
@@ -119,28 +125,28 @@
         <p class="mb-0 text-muted">&copy; 2025 Parking System. All Rights Reserved.</p>
     </footer>
 
-    <!-- Bootstrap and FontAwesome JS -->
+    <!-- JS Libraries -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
-    <!-- Dynamic Video and Maps Buttons Script -->
+    <!-- Maps and Routing Script -->
     <script>
+        let map;
+        let routingControl;
+
         document.getElementById('location').addEventListener('change', function () {
-            var location = this.value;
-            var showVideoButton = document.getElementById('show-video-btn');
-            var showMapsButton = document.getElementById('show-maps-btn');
-            
-            // Show the buttons when a location is selected
-            if (location) {
-                showVideoButton.style.display = 'inline-block';
-                showMapsButton.style.display = 'inline-block'; // Show the "Show Maps" button
-            }
+            const showVideoButton = document.getElementById('show-video-btn');
+            const showMapsButton = document.getElementById('show-maps-btn');
+            showVideoButton.style.display = 'inline-block';
+            showMapsButton.style.display = 'inline-block';
         });
 
         document.getElementById('show-video-btn').addEventListener('click', function () {
-            var location = document.getElementById('location').value;
-            var videoUrl = '';
+            const location = document.getElementById('location').value;
+            let videoUrl = '';
             if (location === 'Beykoz/Ebebek') {
                 videoUrl = '{% url "parking_video" %}';
             } else if (location === 'Üsküdar/AkasyaAWM') {
@@ -150,8 +156,50 @@
         });
 
         document.getElementById('show-maps-btn').addEventListener('click', function () {
-            // You can add an action to show the map, like opening a Google Maps link
-            alert('Maps section will be displayed soon!');
+            const location = document.getElementById('location').value;
+            let destLat, destLng;
+            if (location === 'Beykoz/Ebebek') {
+                destLat = 41.2102;
+                destLng = 29.1366;
+            } else if (location === 'Üsküdar/AkasyaAWM') {
+                destLat = 41.0245;
+                destLng = 29.0375;
+            }
+
+            const mapContainer = document.getElementById('leaflet-map');
+            mapContainer.style.display = 'block';
+
+            if (!map) {
+                map = L.map('leaflet-map').setView([destLat, destLng], 14);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+            } else {
+                map.setView([destLat, destLng], 14);
+            }
+
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+
+                    routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(userLat, userLng),
+                            L.latLng(destLat, destLng)
+                        ],
+                        routeWhileDragging: false
+                    }).addTo(map);
+                }, function () {
+                    alert('Konum alınamadı. Yol tarifi gösterilemiyor.');
+                });
+            } else {
+                alert('Tarayıcınız konum servislerini desteklemiyor.');
+            }
         });
     </script>
 

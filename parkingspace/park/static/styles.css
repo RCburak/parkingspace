@@ -185,6 +185,28 @@ a:hover {
     font-size: 0.9rem;
 }
 
+/* Leaflet Routing Machine Customization */
+.leaflet-routing-container {
+    background-color: white !important;
+    color: black !important;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-routing-container h2,
+.leaflet-routing-container h3,
+.leaflet-routing-container .leaflet-routing-alt,
+.leaflet-routing-container a,
+.leaflet-routing-container input,
+.leaflet-routing-container label {
+    color: black !important;
+}
+
+.leaflet-routing-container .leaflet-routing-alt {
+    background-color: #f9f9f9 !important;
+    border-top: 1px solid #ccc;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero h1 {

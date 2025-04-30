@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking System</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/styles.css">
+
+    <!-- Scroll Reveal -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+</head>
+
+<body class="bg-dark text-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent shadow-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand text-primary font-weight-bold" href="">Parking System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a class="nav-link" href="">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#live-parking">Live</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero text-center d-flex align-items-center justify-content-center position-relative" style="height: 100vh;">
+        <div class="container">
+            <h1 class="display-4 font-weight-bold text-shadow">Welcome to the Parking System!</h1>
+            <p class="lead text-shadow">Secure, convenient, and efficient parking at your fingertips.</p>
+        </div>
+    </header>
+
+    <!-- Live Parking Video Section -->
+    <section id="live-parking" class="live-parking py-5">
+        <div class="container text-center">
+            <h2 class="mb-4">Live Parking Video Feeds</h2>
+            <p>Watch live parking video feeds below:</p>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5 class="text-white">Beykoz/Ebebek</h5>
+                    <div class="video-container border border-light rounded shadow-lg p-2 bg-white">
+                        <img src="{% url 'parking_video' %}" alt="Video 1" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5 class="text-white">Üsküdar/AkasyaAWM</h5>
+                    <div class="video-container border border-light rounded shadow-lg p-2 bg-white">
+                        <img src="{% url 'parking_video_2' %}" alt="Video 2" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about py-5 bg-dark">
+        <div class="container text-center">
+            <h2 class="mb-5 text-white">Why Choose Us?</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-icon mb-3"><i class="fas fa-lock fa-3x text-primary"></i></div>
+                    <h4 class="text-white">Secure Parking</h4>
+                    <p>Our parking spaces are highly secure with round-the-clock surveillance.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-icon mb-3"><i class="fas fa-car fa-3x text-success"></i></div>
+                    <h4 class="text-white">Easy Access</h4>
+                    <p>Find and access available spots easily with our intuitive interface.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-icon mb-3"><i class="fas fa-calendar-check fa-3x text-warning"></i></div>
+                    <h4 class="text-white">Instant Booking</h4>
+                    <p>Book your parking spot instantly without any hassle.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Maps Section -->
+    <section id="maps" class="maps py-5">
+        <div class="container text-center">
+            <h2 class="mb-4 text-white">Maps</h2>
+            <form action="#" method="POST" class="form-inline justify-content-center">
+                <div class="form-group mb-2 mx-3">
+                    <label for="location" class="mr-2 text-white">Location</label>
+                    <select class="form-control custom-form" id="location" name="location">
+                        <option value="Beykoz/Ebebek">Beykoz/Ebebek</option>
+                        <option value="Üsküdar/AkasyaAWM">Üsküdar/AkasyaAWM</option>
+                    </select>
+                </div>
+            </form>
+
+            <!-- Show Live Video Button (Initially Hidden) -->
+            <button class="btn btn-primary mt-3" id="show-video-btn" style="display:none;">Show Live Video</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-center py-3">
+        <p class="mb-0 text-muted">&copy; 2025 Parking System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap and FontAwesome JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Dynamic Video Change Script -->
+    <script>
+        // Listen for location selection change
+        document.getElementById('location').addEventListener('change', function () {
+            var location = this.value;
+            var showButton = document.getElementById('show-video-btn');
+
+            // Show the "Show Live Video" button
+            showButton.style.display = 'inline-block';
+        });
+
+        // When "Show Live Video" button is clicked, open video in a new window
+        document.getElementById('show-video-btn').addEventListener('click', function () {
+            var location = document.getElementById('location').value;
+            var videoUrl = '';
+
+            // Determine the URL to open based on the selected location
+            if (location === 'Beykoz/Ebebek') {
+                videoUrl = '{% url "parking_video" %}';
+            } else if (location === 'Üsküdar/AkasyaAWM') {
+                videoUrl = '{% url "parking_video_2" %}';
+            }
+
+            // Open the video in a new window
+            window.open(videoUrl, '_blank');
+        });
+    </script>
+
+    <!-- ScrollReveal Animations -->
+    <script>
+        ScrollReveal().reveal('.hero', { delay: 200, duration: 1000, origin: 'top', distance: '50px' });
+        ScrollReveal().reveal('.feature-icon', { delay: 200, duration: 1000, origin: 'left', distance: '50px' });
+    </script>
+</body>
+
+</html>

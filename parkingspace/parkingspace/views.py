@@ -72,6 +72,7 @@ def Ebebek(request):
         'video_feed_1': parking_video,  # 1. video akışı
         'video_feed_2': parking_video_2  # 2. video akışı
     })
+
 def AkasyaAWM(request):
     # Video akışlarını template'e direkt gönderiyoruz
     return render(request, 'AkasyaAWM.html', {

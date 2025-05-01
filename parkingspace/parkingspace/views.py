@@ -66,7 +66,20 @@ def parking_video_2(request):
     return StreamingHttpResponse(video_feed_2(), content_type='multipart/x-mixed-replace; boundary=frame')
 
 
+def Ebebek(request):
+    # Video akışlarını template'e direkt gönderiyoruz
+    return render(request, 'Ebebek.html', {
+        'video_feed_1': parking_video,  # 1. video akışı
+        'video_feed_2': parking_video_2  # 2. video akışı
+    })
+def AkasyaAWM(request):
+    # Video akışlarını template'e direkt gönderiyoruz
+    return render(request, 'AkasyaAWM.html', {
+        'video_feed_1': parking_video,  # 1. video akışı
+        'video_feed_2': parking_video_2  # 2. video akışı
+    })
+
 # Ana sayfa - ParkingLocation'ları dinamik gönderiyoruz
 def home(request):
-    locations = ParkingLocation.objects.all()
+    locations = ParkingLocation.objects.all()  # Veritabanındaki tüm ParkingLocationları alıyoruz
     return render(request, 'home.html', {'locations': locations})
